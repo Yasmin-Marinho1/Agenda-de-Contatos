@@ -16,7 +16,7 @@ public class Contato {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String nome;
-	private List<String> telefones;
+	private List<String> telefones = new ArrayList<>();
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private Cidade cidade;
 
@@ -39,9 +39,9 @@ public class Contato {
 		this.nome = nome;
 	}
 	public List<String> getTelefones() {
-		return new ArrayList<>(telefones);
+		return telefones;
 	}
-	public void addTelefones(List<String> telefones) {
+	public void setTelefones(List<String> telefones) {
 		this.telefones = telefones;
 	}
 	public Cidade getCidade() {
@@ -49,5 +49,11 @@ public class Contato {
 	}
 	public void setCidade(Cidade cidade) {
 		this.cidade = cidade;
+	}
+	public void addTelefones(String numero, int id) {
+		telefones.add(numero);
+	}
+	public void removerTelefones(String numero, int id) {
+		telefones.remove(numero);
 	}
 }

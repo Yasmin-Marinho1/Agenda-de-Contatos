@@ -43,8 +43,8 @@ public class Cidade {
 		c.setCidade(this);
 	}
 	public void remover(Contato c) {
-		contatos.remove(c);
 		c.setCidade(null);
+		contatos.remove(c);
 	}
 	public List<Contato> getContatos() {
 		return new ArrayList<>(contatos);

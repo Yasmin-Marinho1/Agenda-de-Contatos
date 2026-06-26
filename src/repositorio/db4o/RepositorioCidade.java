@@ -1,5 +1,6 @@
 package repositorio.db4o;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import com.db4o.query.Query;
 import modelo_negocio.Cidade;

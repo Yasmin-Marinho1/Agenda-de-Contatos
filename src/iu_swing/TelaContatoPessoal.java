@@ -12,12 +12,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,10 +27,9 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 import modelo_negocio.ContatoPessoal;
-import modelo_negocio.Cidade;
 import servico.Servico;
+import servico.ServicoContato;
 import servico.ServicoContatoPessoal;
-import servico.ServicoCidade;
 
 public class TelaContatoPessoal {
 	private JDialog frame;
@@ -46,17 +42,17 @@ public class TelaContatoPessoal {
 	private JLabel label_nome;
 	private JLabel label_cidade;
 	private JLabel label_telefone;
+	private JLabel label_idCidade;
 	private JTextField textField_id;
 	private JTextField textField_nome;
 	private JTextField textField_cidade;
 	private JTextField textField_grauProximidade;
 	private JTextField textField_telefone;
+	private JTextField textField_idCidade;
 	private JButton button_criar;
 	private JButton button_atualizar;
 	private JButton button_apagar;
 	private JButton button_limpar;
-	private JButton button_listarTelefone;
-
 	/**
 	 * Launch the application.
 	 */
@@ -116,7 +112,7 @@ public class TelaContatoPessoal {
 		scrollPane.setBounds(21, 39, 751, 147);
 		frame.getContentPane().add(scrollPane);
 		table = new JTable();
-		table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "ID", "Nome", "Grau de Proximidade", "Cidade" }) {
+		table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "ID", "Nome", "Cidade", "Grau de Proximidade" }) {
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
@@ -137,11 +133,10 @@ public class TelaContatoPessoal {
 				try {
 					label_mensagem.setText("");
 					if (table.getSelectedRow() >= 0) {
-						// copiar a pessoa selecionada para formulario de edicao
 						int id = (int) table.getValueAt(table.getSelectedRow(), 0);
-						Pessoa p = ServicoPessoa.localizarPessoa(id);
+						ContatoPessoal c = ServicoContatoPessoal.localizarContatoPessoal(id);
 						textField_id.setText(id + "");
-						textField_nome.setText(p.getNome());
+						textField_nome.setText(c.getNome());
 						textField_telefone.setText("");
 					}
 				} catch (Exception erro) {
@@ -225,15 +220,6 @@ public class TelaContatoPessoal {
 		button_limpar.setBounds(633, 237, 89, 23);
 		frame.getContentPane().add(button_limpar);
 		
-		button_listarTelefone = new JButton("Listar Telefones");
-		button_listarTelefone.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				botaoListarTelefones();
-			}
-		});
-		button_listarTelefone.setBounds(176, 293, 115, 23);
-		frame.getContentPane().add(button_listarTelefone);
-
 		textField_nome = new JTextField();
 		textField_nome.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textField_nome.setColumns(10);
@@ -259,6 +245,18 @@ public class TelaContatoPessoal {
 		frame.getContentPane().add(textField_id);
 		textField_id.setColumns(10);
 		
+		label_idCidade = new JLabel("ID da Cidade:");
+		label_idCidade.setHorizontalAlignment(SwingConstants.LEFT);
+		label_idCidade.setBounds(21, 255, 21, 14);
+		frame.getContentPane().add(label_idCidade);
+
+		textField_idCidade = new JTextField();
+		textField_idCidade.setFocusable(false);
+		textField_idCidade.setEditable(false);
+		textField_idCidade.setBounds(41, 811, 28, 20);
+		frame.getContentPane().add(textField_idCidade);
+		textField_idCidade.setColumns(10);
+		
 		textField_telefone = new JTextField();
 		textField_telefone.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textField_telefone.setColumns(10);
@@ -281,9 +279,9 @@ public class TelaContatoPessoal {
 		try {
 			DefaultTableModel model = (DefaultTableModel) table.getModel();
 			model.setRowCount(0);
-			List<Pessoa> lista = ServicoPessoa.listarPessoas();
-			for (Pessoa p : lista)
-				model.addRow(new Object[] { p.getId(), p.getNome(), p.getCidade() });
+			List<ContatoPessoal> lista = ServicoContatoPessoal.listarContatosPessoais();
+			for (ContatoPessoal p : lista)
+				model.addRow(new Object[] { p.getId(), p.getNome(), p.getCidade(), p.getGrauProximidade() });
 
 			label_resultado.setText("Resultados: " + lista.size() + " contatos - selecione uma linha para editar");
 		} catch (Exception erro) {
@@ -306,11 +304,11 @@ public class TelaContatoPessoal {
 			int escolha = JOptionPane.showOptionDialog(null, "Esta operação apagará o contato " + id, "Alerta",
 					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
 			if (escolha == JOptionPane.OK_OPTION) {
-				ServicoPessoa.apagarPessoa(id);
-				label_mensagem.setText("Contato excluído id=" + id);
+				ServicoContato.apagarContato(id);
+				label_mensagem.setText("Contato excluído id: " + id);
 				listagem();
 			} else
-				label_mensagem.setText("Exclusão cancelada id=" + id);
+				label_mensagem.setText("Exclusão cancelada id: " + id);
 
 		} catch (Exception erro) {
 			label_mensagem.setText(erro.getMessage());
@@ -321,8 +319,10 @@ public class TelaContatoPessoal {
 		try {
 			label_mensagem.setText("");
 			String nome = textField_nome.getText().trim();
-
-			ServicoPessoa.criarPessoa(nome);
+			int grau = Integer.parseInt(textField_grauProximidade.getText().trim());
+			int idC = Integer.parseInt(textField_idCidade.getText().trim());
+			
+			ServicoContatoPessoal.criarContatoPessoal(nome, grau, idC);
 
 			label_mensagem.setText("Contato criada");
 			listagem();
@@ -340,12 +340,14 @@ public class TelaContatoPessoal {
 			}
 
 			label_mensagem.setText("");
-			int id = Integer.parseInt(textField_id.getText());
-			String nome = textField_nome.getText();
+			int id = Integer.parseInt(textField_id.getText().trim());
+			String nome = textField_nome.getText().trim();
+			int grau = Integer.parseInt(textField_grauProximidade.getText().trim());
+			int idC = Integer.parseInt(textField_idCidade.getText().trim());
 
-			ServicoPessoa.alterarPessoa(id, nome);
+			ServicoContatoPessoal.alterarContatoPessoal(id, nome, grau, idC);
 
-			label_mensagem.setText("Pessoa atualizada id=" + id);
+			label_mensagem.setText("Pessoa atualizada id: " + id);
 			listagem();
 		} catch (Exception ex2) {
 			label_mensagem.setText(ex2.getMessage());

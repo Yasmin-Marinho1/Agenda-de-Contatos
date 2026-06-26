@@ -14,12 +14,11 @@ public class ContatoComercial extends Contato {
 		this.empresa = empresa;
 	}
 	public ContatoComercial(String nome, String empresa2, int idCidade) {
-		// TODO Auto-generated constructor stub
 	}
 	public String getEmpresa() {
 		return empresa;
 	}
-	public void setNota(String empresa) {
+	public void setEmpresa(String empresa) {
 		this.empresa = empresa;
 	}
 }
