@@ -74,6 +74,7 @@ public class TelaContatoPessoal {
 	 */
 	public TelaContatoPessoal() {
 		initialize();
+		frame.setVisible(true); 
 	}
 
 	/**
@@ -83,7 +84,7 @@ public class TelaContatoPessoal {
 		frame = new JDialog();
 		frame.setResizable(false);
 		frame.setModal(true);
-		frame.setTitle("Pessoa");
+		frame.setTitle("Agenda de Contatos Pessoais");
 		frame.setBounds(100, 100, 813, 401);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);

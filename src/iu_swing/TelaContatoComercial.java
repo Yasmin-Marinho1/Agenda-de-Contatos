@@ -75,6 +75,7 @@ public class TelaContatoComercial {
 	 */
 	public TelaContatoComercial() {
 		initialize();
+		frame.setVisible(true); 
 	}
 
 	/**
@@ -84,7 +85,7 @@ public class TelaContatoComercial {
 		frame = new JDialog();
 		frame.setResizable(false);
 		frame.setModal(true);
-		frame.setTitle("Pessoa");
+		frame.setTitle("Agenda de Contatos Comerciais");
 		frame.setBounds(100, 100, 813, 401);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
