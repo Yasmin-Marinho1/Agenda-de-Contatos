@@ -9,6 +9,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -16,6 +18,8 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.SwingConstants;
+
+import servico.Servico;
 
 public class TelaPrincipal {
 	private JFrame frame;
@@ -44,7 +48,6 @@ public class TelaPrincipal {
 	 */
 	public TelaPrincipal() {
 		initialize();
-		frame.setVisible(true);
 	}
 
 	/**
@@ -58,7 +61,24 @@ public class TelaPrincipal {
 		frame.getContentPane().setLayout(null);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
-		
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowOpened(WindowEvent e) {
+				try {
+					Servico.conectar();
+				} catch (Exception ex) {
+					label.setText(ex.getMessage());
+				}
+			}
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				try {
+					Servico.desconectar();
+				} catch (Exception e) {
+					label.setText(e.getMessage());
+				}
+			}
+		});
 		label = new JLabel("");
 		label.setFont(new Font("Tahoma", Font.PLAIN, 26));
 		label.setHorizontalAlignment(SwingConstants.CENTER);

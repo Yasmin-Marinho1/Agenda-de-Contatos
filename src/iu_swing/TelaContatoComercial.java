@@ -26,8 +26,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import modelo_negocio.Cidade;
 import modelo_negocio.ContatoComercial;
 import servico.Servico;
+import servico.ServicoCidade;
 import servico.ServicoContato;
 import servico.ServicoContatoComercial;
 
@@ -42,13 +44,11 @@ public class TelaContatoComercial {
 	private JLabel label_nome;
 	private JLabel label_cidade;
 	private JLabel label_telefone;
-	private JLabel label_idCidade;
 	private JTextField textField_id;
 	private JTextField textField_nome;
 	private JTextField textField_cidade;
 	private JTextField textField_empresa;
 	private JTextField textField_telefone;
-	private JTextField textField_idCidade;
 	private JButton button_criar;
 	private JButton button_atualizar;
 	private JButton button_apagar;
@@ -176,7 +176,7 @@ public class TelaContatoComercial {
 		label_telefone = new JLabel("N\u00FAmero:");
 		label_telefone.setHorizontalAlignment(SwingConstants.LEFT);
 		label_telefone.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_telefone.setBounds(301, 297, 50, 14);
+		label_telefone.setBounds(180, 293, 50, 14);
 		frame.getContentPane().add(label_telefone);
 
 		button_criar = new JButton("Criar");
@@ -246,22 +246,10 @@ public class TelaContatoComercial {
 		frame.getContentPane().add(textField_id);
 		textField_id.setColumns(10);
 		
-		label_idCidade = new JLabel("ID da Cidade:");
-		label_idCidade.setHorizontalAlignment(SwingConstants.LEFT);
-		label_idCidade.setBounds(21, 255, 21, 14);
-		frame.getContentPane().add(label_idCidade);
-
-		textField_idCidade = new JTextField();
-		textField_idCidade.setFocusable(false);
-		textField_idCidade.setEditable(false);
-		textField_idCidade.setBounds(41, 811, 28, 20);
-		frame.getContentPane().add(textField_idCidade);
-		textField_idCidade.setColumns(10);
-		
 		textField_telefone = new JTextField();
 		textField_telefone.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textField_telefone.setColumns(10);
-		textField_telefone.setBounds(353, 293, 115, 20);
+		textField_telefone.setBounds(230, 293, 115, 20);
 		frame.getContentPane().add(textField_telefone);
 
 		try {
@@ -321,8 +309,11 @@ public class TelaContatoComercial {
 			label_mensagem.setText("");
 			String nome = textField_nome.getText().trim();
 			String empresa = textField_empresa.getText().trim();
-			int idC = Integer.parseInt(textField_idCidade.getText().trim());
-
+			String cidade = textField_cidade.getText().trim();
+			if (ServicoCidade.localizarCidade(cidade) == null) {
+				ServicoCidade.criarCidade(cidade);
+			} Cidade c = ServicoCidade.localizarCidade(cidade);
+			int idC = c.getId();
 			ServicoContatoComercial.criarContatoComercial(nome, empresa, idC);
 
 			label_mensagem.setText("Contato criada");
@@ -339,13 +330,15 @@ public class TelaContatoComercial {
 				label_mensagem.setText("Selecione um contato");
 				return;
 			}
-
 			label_mensagem.setText("");
 			int id = Integer.parseInt(textField_id.getText().trim());
 			String nome = textField_nome.getText().trim();
 			String empresa = textField_empresa.getText().trim();
-			int idC = Integer.parseInt(textField_idCidade.getText().trim());
-
+			String cidade = textField_cidade.getText().trim();
+			if (ServicoCidade.localizarCidade(cidade) == null) {
+				ServicoCidade.criarCidade(cidade);
+			} Cidade c = ServicoCidade.localizarCidade(cidade);
+			int idC = c.getId();
 			ServicoContatoComercial.alterarContatoComercial(id, nome, empresa, idC);
 
 			label_mensagem.setText("Pessoa atualizada id: " + id);

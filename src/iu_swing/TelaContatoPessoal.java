@@ -26,8 +26,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import modelo_negocio.Cidade;
 import modelo_negocio.ContatoPessoal;
 import servico.Servico;
+import servico.ServicoCidade;
 import servico.ServicoContato;
 import servico.ServicoContatoPessoal;
 
@@ -42,13 +44,11 @@ public class TelaContatoPessoal {
 	private JLabel label_nome;
 	private JLabel label_cidade;
 	private JLabel label_telefone;
-	private JLabel label_idCidade;
 	private JTextField textField_id;
 	private JTextField textField_nome;
 	private JTextField textField_cidade;
 	private JTextField textField_grauProximidade;
 	private JTextField textField_telefone;
-	private JTextField textField_idCidade;
 	private JButton button_criar;
 	private JButton button_atualizar;
 	private JButton button_apagar;
@@ -161,10 +161,10 @@ public class TelaContatoPessoal {
 		label_nome.setBounds(180, 215, 50, 14);
 		frame.getContentPane().add(label_nome);
 
-		label_cidade = new JLabel("Cidade:");
+		label_cidade = new JLabel("Criar Cidade:");
 		label_cidade.setHorizontalAlignment(SwingConstants.LEFT);
 		label_cidade.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_cidade.setBounds(180, 269, 50, 14);
+		label_cidade.setBounds(180, 269, 72, 14);
 		frame.getContentPane().add(label_cidade);
 
 		label_grauProximidade = new JLabel("Grau de Proximidade:");
@@ -176,7 +176,7 @@ public class TelaContatoPessoal {
 		label_telefone = new JLabel("N\u00FAmero:");
 		label_telefone.setHorizontalAlignment(SwingConstants.LEFT);
 		label_telefone.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		label_telefone.setBounds(301, 297, 50, 14);
+		label_telefone.setBounds(324, 241, 50, 14);
 		frame.getContentPane().add(label_telefone);
 
 		button_criar = new JButton("Criar");
@@ -225,13 +225,13 @@ public class TelaContatoPessoal {
 		textField_nome.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textField_nome.setColumns(10);
 		textField_nome.setBackground(Color.WHITE);
-		textField_nome.setBounds(230, 211, 238, 20);
+		textField_nome.setBounds(221, 211, 247, 20);
 		frame.getContentPane().add(textField_nome);
 
 		textField_grauProximidade = new JTextField();
 		textField_grauProximidade.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textField_grauProximidade.setColumns(10);
-		textField_grauProximidade.setBounds(302, 237, 166, 20);
+		textField_grauProximidade.setBounds(290, 237, 28, 20);
 		frame.getContentPane().add(textField_grauProximidade);
 
 		label_id = new JLabel("ID:");
@@ -246,22 +246,10 @@ public class TelaContatoPessoal {
 		frame.getContentPane().add(textField_id);
 		textField_id.setColumns(10);
 		
-		label_idCidade = new JLabel("ID da Cidade:");
-		label_idCidade.setHorizontalAlignment(SwingConstants.LEFT);
-		label_idCidade.setBounds(21, 255, 21, 14);
-		frame.getContentPane().add(label_idCidade);
-
-		textField_idCidade = new JTextField();
-		textField_idCidade.setFocusable(false);
-		textField_idCidade.setEditable(false);
-		textField_idCidade.setBounds(41, 811, 28, 20);
-		frame.getContentPane().add(textField_idCidade);
-		textField_idCidade.setColumns(10);
-		
 		textField_telefone = new JTextField();
 		textField_telefone.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		textField_telefone.setColumns(10);
-		textField_telefone.setBounds(353, 293, 115, 20);
+		textField_telefone.setBounds(370, 237, 98, 20);
 		frame.getContentPane().add(textField_telefone);
 
 		try {
@@ -269,7 +257,7 @@ public class TelaContatoPessoal {
 			textField_cidade = new JTextField();
 			textField_cidade.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			textField_cidade.setColumns(10);
-			textField_cidade.setBounds(230, 265, 238, 20);
+			textField_cidade.setBounds(246, 265, 222, 20);
 			frame.getContentPane().add(textField_cidade);
 
 		} catch (Exception e1) {
@@ -321,8 +309,11 @@ public class TelaContatoPessoal {
 			label_mensagem.setText("");
 			String nome = textField_nome.getText().trim();
 			int grau = Integer.parseInt(textField_grauProximidade.getText().trim());
-			int idC = Integer.parseInt(textField_idCidade.getText().trim());
-			
+			String cidade = textField_cidade.getText().trim();
+			if (ServicoCidade.localizarCidade(cidade) == null) {
+				ServicoCidade.criarCidade(cidade);
+			} Cidade c = ServicoCidade.localizarCidade(cidade);
+			int idC = c.getId();
 			ServicoContatoPessoal.criarContatoPessoal(nome, grau, idC);
 
 			label_mensagem.setText("Contato criada");
@@ -339,13 +330,15 @@ public class TelaContatoPessoal {
 				label_mensagem.setText("Selecione um contato");
 				return;
 			}
-
 			label_mensagem.setText("");
 			int id = Integer.parseInt(textField_id.getText().trim());
 			String nome = textField_nome.getText().trim();
 			int grau = Integer.parseInt(textField_grauProximidade.getText().trim());
-			int idC = Integer.parseInt(textField_idCidade.getText().trim());
-
+			String cidade = textField_cidade.getText().trim();
+			if (ServicoCidade.localizarCidade(cidade) == null) {
+				ServicoCidade.criarCidade(cidade);
+			} Cidade c = ServicoCidade.localizarCidade(cidade);
+			int idC = c.getId();
 			ServicoContatoPessoal.alterarContatoPessoal(id, nome, grau, idC);
 
 			label_mensagem.setText("Pessoa atualizada id: " + id);
