@@ -238,6 +238,8 @@ public class TelaContatoPessoal {
 				textField_nome.setText("");
 				textField_grauProximidade.setText("");
 				textField_telefone.setText("");
+				textField_cidade.setText("");
+				textField_id.setText("");
 			}
 		});
 		button_limpar.setBounds(633, 237, 89, 23);

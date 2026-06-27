@@ -28,12 +28,10 @@ import javax.swing.table.DefaultTableModel;
 
 import modelo_negocio.Cidade;
 import modelo_negocio.ContatoComercial;
-import modelo_negocio.ContatoPessoal;
 import servico.Servico;
 import servico.ServicoCidade;
 import servico.ServicoContato;
 import servico.ServicoContatoComercial;
-import servico.ServicoContatoPessoal;
 
 public class TelaContatoComercial {
 	private JDialog frame;
@@ -241,6 +239,8 @@ public class TelaContatoComercial {
 				textField_nome.setText("");
 				textField_empresa.setText("");
 				textField_telefone.setText("");
+				textField_cidade.setText("");
+				textField_id.setText("");
 			}
 		});
 		button_limpar.setBounds(633, 237, 89, 23);
