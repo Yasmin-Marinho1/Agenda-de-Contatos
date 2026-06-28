@@ -236,11 +236,7 @@ public class TelaContatoComercial {
 		button_limpar = new JButton("Limpar");
 		button_limpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textField_id.setText("");
-				textField_nome.setText("");
-				textField_empresa.setText("");
-				textField_telefone.setText("");
-				textField_cidade.setText("");
+				botaoLimpar();
 			}
 		});
 		button_limpar.setBounds(633, 237, 89, 23);
@@ -302,6 +298,14 @@ public class TelaContatoComercial {
 			label_mensagem.setText(erro.getMessage());
 		}
 	}
+	
+	public void botaoLimpar() {
+		textField_id.setText("");
+		textField_nome.setText("");
+		textField_empresa.setText("");
+		textField_telefone.setText("");
+		textField_cidade.setText("");
+	}
 
 	public void botaoApagar() {
 		try {
@@ -321,11 +325,7 @@ public class TelaContatoComercial {
 				ServicoContato.apagarContato(id);
 				label_mensagem.setText("Contato excluído id: " + id);
 				listagem();
-				textField_id.setText("");
-				textField_nome.setText("");
-				textField_empresa.setText("");
-				textField_telefone.setText("");
-				textField_cidade.setText("");
+				botaoLimpar();
 			} else
 				label_mensagem.setText("Exclusão cancelada id: " + id);
 
@@ -348,6 +348,7 @@ public class TelaContatoComercial {
 				ServicoCidade.criarCidade(c);
 			}
 			Cidade cid = ServicoCidade.localizarCidade(c);
+			textField_cidade.setText(cid.getNome());
 			int idCidade = cid.getId();
 			ServicoContatoComercial.criarContatoComercial(nome, empresa, idCidade);
 
@@ -378,6 +379,7 @@ public class TelaContatoComercial {
 				ServicoCidade.criarCidade(c);
 			}
 			Cidade cid = ServicoCidade.localizarCidade(c);
+			textField_cidade.setText(cid.getNome());
 			int idCidade = cid.getId();
 			ServicoContatoComercial.alterarContatoComercial(id, nome, empresa, idCidade);
 
