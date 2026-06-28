@@ -12,7 +12,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.Normalizer;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -332,11 +334,16 @@ public class TelaContatoPessoal {
 			label_mensagem.setText("");
 			String nome = textField_nome.getText().trim();
 			int grau = Integer.parseInt(textField_grauProximidade.getText().trim());
-			String cidade = textField_cidade.getText().trim();
-			if (ServicoCidade.localizarCidade(cidade) == null) {
-				ServicoCidade.criarCidade(cidade);
-			} Cidade c = ServicoCidade.localizarCidade(cidade);
-			int idCidade = c.getId();
+			String cidade = textField_cidade.getText();
+			String nom = Normalizer.normalize(cidade, Normalizer.Form.NFD);
+			Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+	        String name = pattern.matcher(nom).replaceAll("");
+			String c = name.toUpperCase();
+			if (ServicoCidade.localizarCidade(c) == null) {
+				ServicoCidade.criarCidade(c);
+			}
+			Cidade cid = ServicoCidade.localizarCidade(c);
+			int idCidade = cid.getId();
 			ServicoContatoPessoal.criarContatoPessoal(nome, grau, idCidade);
 
 			label_mensagem.setText("Contato pessoal criado");
@@ -357,12 +364,17 @@ public class TelaContatoPessoal {
 			int id = Integer.parseInt(textField_id.getText().trim());
 			String nome = textField_nome.getText().trim();
 			int grau = Integer.parseInt(textField_grauProximidade.getText().trim());
-			String cidade = textField_cidade.getText().trim();
-			if (ServicoCidade.localizarCidade(cidade) == null) {
-				ServicoCidade.criarCidade(cidade);
-			} Cidade c = ServicoCidade.localizarCidade(cidade);
-			int idC = c.getId();
-			ServicoContatoPessoal.alterarContatoPessoal(id, nome, grau, idC);
+			String cidade = textField_cidade.getText();
+			String nom = Normalizer.normalize(cidade, Normalizer.Form.NFD);
+			Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+	        String name = pattern.matcher(nom).replaceAll("");
+			String c = name.toUpperCase();
+			if (ServicoCidade.localizarCidade(c) == null) {
+				ServicoCidade.criarCidade(c);
+			}
+			Cidade cid = ServicoCidade.localizarCidade(c);
+			int idCidade = cid.getId();
+			ServicoContatoPessoal.alterarContatoPessoal(id, nome, grau, idCidade);
 
 			label_mensagem.setText("Contato pessoal atualizado id: " + id);
 			listagem();
