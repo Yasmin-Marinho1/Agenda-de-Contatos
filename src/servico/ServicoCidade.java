@@ -1,6 +1,5 @@
 package servico;
 
-import java.text.Normalizer;
 import java.util.regex.Pattern;
 
 import modelo_negocio.Cidade;
@@ -35,19 +34,15 @@ public class ServicoCidade extends Servico {
 			if (nome != null && nome.matches(".*\\d.*")) {
 	            throw new Exception("cidade inválida: não deve conter números");
 	        }
-			String nom = Normalizer.normalize(nome, Normalizer.Form.NFD);
-			Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-	        String name = pattern.matcher(nom).replaceAll("");
-			String n = name.toUpperCase().trim();
-			if (n.equals("")) {
+			if (nome.equals("")) {
 				throw new Exception("cidade inválida");
 			}
 			repCidade.begin();
-			Cidade c = ServicoCidade.localizarCidade(n);
+			Cidade c = ServicoCidade.localizarCidade(nome);
 			if (c != null) {
-				throw new Exception("cidade já existe: " + n);
+				throw new Exception("cidade já existe: " + nome);
 			}
-			c = new Cidade(n);
+			c = new Cidade(nome);
 			repCidade.criar(c);
 			repCidade.commit();
 			
