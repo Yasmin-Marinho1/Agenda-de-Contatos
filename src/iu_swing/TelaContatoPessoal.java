@@ -430,6 +430,7 @@ public class TelaContatoPessoal {
 			ServicoContato.adicionarTelefoneContato(numero, id);
 			label_mensagem.setText("Telefone criado: " + numero);
 			textField_telefone.setText("");
+			listagem();
 		} catch (Exception ex) {
 			label_mensagem.setText(ex.getMessage());
 		}

@@ -420,17 +420,16 @@ public class TelaContatoComercial {
 				label_mensagem.setText("Selecione um contato comercial");
 				return;
 			}
-
 			if (textField_telefone.getText().isEmpty()) {
 				label_mensagem.setText("Campo de criar telefone vazio");
 				return;
 			}
-
 			int id = Integer.parseInt(textField_id.getText().trim());
 			String numero = textField_telefone.getText().trim();
 			ServicoContato.adicionarTelefoneContato(numero, id);
 			label_mensagem.setText("Telefone criado: " + numero);
 			textField_telefone.setText("");
+			listagem();
 		} catch (Exception ex) {
 			label_mensagem.setText(ex.getMessage());
 		}
