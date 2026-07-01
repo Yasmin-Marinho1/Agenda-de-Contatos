@@ -1,8 +1,5 @@
 package modelo_negocio;
 
-import jakarta.persistence.Entity;
-
-@Entity
 public class ContatoComercial extends Contato {
 	private String empresa;
 	

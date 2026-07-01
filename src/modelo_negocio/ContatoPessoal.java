@@ -1,8 +1,5 @@
 package modelo_negocio;
 
-import jakarta.persistence.Entity;
-
-@Entity
 public class ContatoPessoal extends Contato {
 	private int grauProximidade;
 

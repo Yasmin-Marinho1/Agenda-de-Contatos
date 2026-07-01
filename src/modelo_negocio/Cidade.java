@@ -3,20 +3,9 @@ package modelo_negocio;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-
 public class Cidade {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String nome;
-	@OneToMany(mappedBy = "cidade", 
-			cascade = {CascadeType.PERSIST, CascadeType.MERGE}, 
-			orphanRemoval = false)
 	private List<Contato> contatos = new ArrayList<>();
 	
 	public Cidade() {}
